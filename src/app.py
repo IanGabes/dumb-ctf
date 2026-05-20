@@ -103,7 +103,7 @@ def quiz(q_id=None):
                 db.session.commit()
                 return redirect(url_for('quiz', q_id=current_user.current_question))
             else:
-                flash('IncorrecT', 'error')
+                flash('Incorrect', 'error')
         else:
             # If they are viewing an old question and "submit", just take them to the next one they've already cleared
             return redirect(url_for('quiz', q_id=q_id + 1))
