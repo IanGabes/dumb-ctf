@@ -72,6 +72,23 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+@app.route('/scoreboard')
+def scoreboard():
+    # Calculate scores by counting UserAnswer entries for each user
+    users = User.query.all()
+    scoreboard_data = []
+    for user in users:
+        score = UserAnswer.query.filter_by(user_id=user.id).count()
+        scoreboard_data.append({
+            'username': user.username,
+            'score': score
+        })
+    
+    # Sort by score descending
+    scoreboard_data.sort(key=lambda x: x['score'], reverse=True)
+    
+    return render_template('scoreboard.html', scoreboard=scoreboard_data)
+
 @app.route('/quiz', methods=['GET', 'POST'])
 @app.route('/quiz/<int:q_id>', methods=['GET', 'POST'])
 @login_required

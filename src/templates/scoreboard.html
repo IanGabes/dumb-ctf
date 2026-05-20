@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>::GLOBAL_SCOREBOARD</h2>
+<p class="question-meta">LEADERBOARD_STATUS: ACTIVE</p>
+
+<table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+    <thead>
+        <tr style="border-bottom: 1px solid var(--primary-neon); text-align: left;">
+            <th style="padding: 10px; font-family: 'Orbitron', sans-serif;">RANK</th>
+            <th style="padding: 10px; font-family: 'Orbitron', sans-serif;">IDENTITY</th>
+            <th style="padding: 10px; font-family: 'Orbitron', sans-serif; text-align: right;">SOLVES</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in scoreboard %}
+        <tr style="border-bottom: 1px solid rgba(0, 242, 255, 0.1);">
+            <td style="padding: 12px; color: var(--secondary-neon);">#{{ loop.index }}</td>
+            <td style="padding: 12px;">{{ entry.username }}</td>
+            <td style="padding: 12px; text-align: right; color: var(--primary-neon); font-weight: bold;">{{ entry.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div style="margin-top: 30px;">
+    <a href="{{ url_for('quiz') }}" style="text-decoration: none;">
+        <button>BACK_TO_TERMINAL</button>
+    </a>
+</div>
+{% endblock %}
