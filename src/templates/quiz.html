@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div class="question-meta">NODE_ID: {{ "%02d" % question.id }} // STATUS: {{ 'ACTIVE' if is_latest else 'READ_ONLY' }}</div>
+    <div>
+        {% if question.id > 1 %}
+            <a href="{{ url_for('quiz', q_id=question.id - 1) }}" style="color: var(--primary-neon); text-decoration: none; font-size: 0.8rem; border: 1px solid var(--primary-neon); padding: 5px 10px; margin-right: 10px;">[ PREV ]</a>
+        {% endif %}
+        
+        {% if question.id < max_reached %}
+            <a href="{{ url_for('quiz', q_id=question.id + 1) }}" style="color: var(--primary-neon); text-decoration: none; font-size: 0.8rem; border: 1px solid var(--primary-neon); padding: 5px 10px;">[ NEXT ]</a>
+        {% endif %}
+    </div>
+</div>
+
+<h2>// DATA_QUERY:</h2>
+<p style="font-size: 1.2rem; margin-bottom: 30px;">{{ question.question }}</p>
+
+{% if is_latest %}
+    <form method="POST">
+        <div>
+            <label style="font-size: 0.7rem; color: var(--primary-neon); display: block; margin-bottom: 5px;">ENTER_PARAMETER:</label>
+            <input type="text" name="answer" autofocus autocomplete="off" placeholder="Type here..." required>
+        </div>
+        <button type="submit">VALIDATE_RESPONSE</button>
+    </form>
+{% else %}
+    <div style="border: 1px dashed var(--secondary-neon); padding: 15px; color: var(--secondary-neon);">
+        <p style="margin: 0; font-size: 0.9rem;">>> STATUS: NODE_VALIDATED</p>
+        <p style="margin: 10px 0 0 0; font-size: 0.8rem; color: var(--text-color);">SUBMITTED_PARAMETER: <span style="color: var(--primary-neon); text-shadow: 0 0 5px var(--primary-neon);">{{ prev_answer }}</span></p>
+        <p style="margin: 5px 0 0 0; font-size: 0.7rem; opacity: 0.7;">ACCESS_GRANTED. Integrity check passed.</p>
+    </div>
+{% endif %}
+
+<div style="margin-top: 40px; font-size: 0.7rem; opacity: 0.4;">
+    {% if is_latest %}
+        CAUTION: Incorrect sequence input will trigger an "IncorrecT" error state.
+    {% else %}
+        NOTE: You are viewing a previously validated node. Return to latest node for further progression.
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>// SYSTEM_INIT: SEQUENCED_QUIZ</h1>
+<p>Authorize to begin data extraction. You must validate 20 consecutive data nodes to achieve full system synchronization.</p>
+<p>Failure to provide correct parameters will result in immediate sequence rejection.</p>
+
+{% if not current_user.is_authenticated %}
+    <div style="margin-top: 30px;">
+        <p>> <a href="{{ url_for('register') }}" style="color: var(--secondary-neon);">[INITIALIZE_NEW_IDENTITY]</a></p>
+        <p>> <a href="{{ url_for('login') }}" style="color: var(--primary-neon);">[RESTORE_EXISTING_SESSION]</a></p>
+    </div>
+{% else %}
+    <div style="margin-top: 30px;">
+        <p>> <a href="{{ url_for('quiz') }}" style="color: var(--primary-neon); text-decoration: none; border: 1px solid var(--primary-neon); padding: 10px;">[ENGAGE_QUIZ_MODULE]</a></p>
+    </div>
+{% endif %}
+{% endblock %}

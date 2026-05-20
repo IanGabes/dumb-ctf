@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERMINAL // QUIZ_OS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0a0c;
+            --container-bg: #121217;
+            --primary-neon: #00f2ff;
+            --secondary-neon: #7000ff;
+            --text-color: #e0e0e5;
+            --error-neon: #ff0055;
+            --border-glow: 0 0 10px rgba(0, 242, 255, 0.3);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 70%),
+                linear-gradient(0deg, rgba(10, 10, 12, 1) 0%, rgba(20, 20, 25, 1) 100%);
+            color: var(--text-color);
+            font-family: 'Fira Code', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--container-bg);
+            border: 1px solid var(--primary-neon);
+            box-shadow: var(--border-glow);
+            padding: 30px;
+            position: relative;
+            clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%);
+        }
+
+        .container::before {
+            content: "SYSTEM_STATUS: ONLINE";
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            font-size: 0.7rem;
+            color: var(--primary-neon);
+            opacity: 0.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-neon);
+            text-shadow: 0 0 15px rgba(0, 242, 255, 0.5);
+        }
+
+        nav {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+            padding-bottom: 10px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--primary-neon);
+            text-shadow: 0 0 8px var(--primary-neon);
+        }
+
+        .flash {
+            padding: 15px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary-neon);
+            background: rgba(0, 242, 255, 0.05);
+            font-size: 0.9rem;
+        }
+
+        .flash.error {
+            border-left-color: var(--error-neon);
+            color: var(--error-neon);
+            background: rgba(255, 0, 85, 0.05);
+            text-shadow: 0 0 5px var(--error-neon);
+        }
+
+        input[type="text"], input[type="password"] {
+            background: #1a1a21;
+            border: 1px solid #333;
+            color: var(--primary-neon);
+            padding: 12px;
+            font-family: inherit;
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 8px rgba(0, 242, 255, 0.2);
+        }
+
+        button {
+            background: transparent;
+            border: 1px solid var(--primary-neon);
+            color: var(--primary-neon);
+            padding: 10px 25px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background: var(--primary-neon);
+            color: var(--bg-color);
+            box-shadow: 0 0 20px var(--primary-neon);
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid rgba(0, 242, 255, 0.1);
+            margin: 20px 0;
+        }
+
+        .question-meta {
+            font-size: 0.8rem;
+            color: var(--secondary-neon);
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('index') }}">::HOME</a>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('quiz') }}">::QUIZ_MODULE</a>
+            <a href="{{ url_for('logout') }}">::DISCONNECT</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">::ACCESS_ID</a>
+            <a href="{{ url_for('register') }}">::CREATE_IDENTITY</a>
+        {% endif %}
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
